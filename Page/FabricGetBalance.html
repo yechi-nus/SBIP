@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <title>JavaScript RSA Encryption</title>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="https://travistidwell.com/jsencrypt/bin/jsencrypt.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha256.js"></script>
+    <script type="text/javascript">
+
+      // Call this code when the page is done loading.
+      $(function() {
+		var today = new Date();
+		$('#timestamp').val(today.getTime())
+		
+        // Run a quick encryption/decryption when they click.
+        $('#testme').click(function() {
+
+          // Encrypt with the public key...
+          var encrypt = new JSEncrypt();
+          encrypt.setPublicKey($('#pubkey').val());
+          var encrypted = encrypt.encrypt($('#input').val());
+
+          // Decrypt with the private key...
+          var decrypt = new JSEncrypt();
+          decrypt.setPrivateKey($('#privkey').val());
+          var uncrypted = decrypt.decrypt(encrypted);
+
+          // Now a simple check to see if the round-trip worked.
+          if (uncrypted == $('#input').val()) {
+            alert('It works!!!');
+          }
+          else {
+            alert('Something went wrong....');
+          }
+        });
+		
+		$('#sign').click(function() {
+			//input public key by account.
+			if ("test1" == $('#account').val())
+			{
+				$('#key').val("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtHXGVArjsMMKHoxDOpAlsX2GHcJY2OfLUWrKB5bu8iSrlK4iqml7TtsEbrWRqgdTKbZ65yAqPeDBAsWoo5ZMtsNXKf3OsmOace2moAHkDGDUvEOSDYcU0akKnCUD98dVcHyyEg8VyGwXlDFYwCoRGhj42uy9xdNV5XNdBW/5+ZLgKG/iJ36bI+FdhhdKAqXYf6ikPetU2jglXV7/k4V4CA1kK9omgCpBj3o46RE3AmTstu4I82NxnhsEM3n0rpzIvz6CMbQMof2oQDmvHAqT2fHML6EF7p3nfyRrf9z8w52vQitIs5X0Nve1cmsmhbUThm9+clu3XplYk1cERPJ3nwIDAQAB")
+			}
+			else if ("test2" == $('#account').val())
+			{
+				$('#key').val("MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQB3Ubf3TEJDPtaJZdupbzIq7e4hZbkrjsrPVUtDdfMGEYaxtj60Idcj6MuVUjCmGXOYkk9LjFmJpS3pxaxmbIY6yxTpDsTL6kUcH5F/OJT7aDkiRQuMff6vvBFT2Zji0nV/LkC/exgNPU/ogceMiVaTRowjUnwIy3/obuqwCOphapZkruLbLUO/+hELfKKMVyoPY0jh6FTWxFx0tOCXGvOFKkhrAjyH/ZJkcI9bP0CliNEu7ttGpGgXKSrXCXIinSJgwgQhTCXR97dLJkLwf5cFaC+8j0Zr9ghvcYwLPYbQmaLjY+We/otplTgPslHNdf5gVNMrW5oK6BRsfGMcE6g/AgMBAAE=")
+			}
+			else if ("test3" == $('#account').val())
+			{
+				$('#key').val("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3XEVLekATXrNhnNnQRVgBkbw+Sv4rQyLyvHA6S3yxWBQFP3bvrsaCGjIO52OUuvOi8fIHIAU9gD0YrglE1ZDsgForFhtt4+N3/XI9J5pObj9kGz+Y/4Rh61MuimrOokESZUMEj6Q8IdtCVMFo18BxCZIa0CkXs28VIQL50OpDWmio9Xg4tmaBH2JX50WAQRvtagF2QS3JEQvJvQAvap+3KgWh/3332emzrVzOxjS35tEVov2aNha1uZgoc4+YULa3ljTx8igeS9Qj34suBIPmwUmo7qOVdemzmrfIg2RorBA7DauBUF+vY67Js31dZU/LEgrvuj27sd99JqOX6vntQIDAQAB")
+			}
+			else if ("test4" == $('#account').val())
+			{
+				$('#key').val("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlBt1zMfBpu+M5JmCza0WPSIE7T7J3ShWzQuIx1xI2lH4VEtXw9PFEq6rbL9WDQHMh8IfwIJDzZmMW8xSIiHqBNAz5dSgs9tKe7C6mLSaVkjtQ/W3ln3Z6ufCWWjwPFxsboKYU9SrNJuubAXCWQ/AYN8dd75os31f9badXkcb3BRxjsdSqGxGjlIm7r8EWQMJeEvdv6aLkSew6bweLiebkZrQiaHbjETN+aLJM5e6DG4Hld2Ya577//F1Dsf73RyrYzK6AzXUlgK0znr6OjkXrJCAbiCDUfQHsf8MRP4nVAfrCmbfn4TUnN4Usap4D3JpcAcIYM5AfINxUsTQx6nEOQIDAQAB")
+			}
+			else if ("test5" == $('#account').val())
+			{
+				$('#key').val("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzpB9ZPgGFiNv1K6jVqRMWJBV/3iYzIRB46EZ4pRxzPt5SFGuTDc3hfawx7WbsWwZyTwoBRUyPnL1iODLRn8Weo6Xy9X5hdMMmAoiZoIssyIhNsZhTCzteBz8CVTbSDUX00yhQjJZVkrTBkBHFllzljiY1+Ovpp0hlAAzmPs9kr0TPr61lCBU4D9IA4ibL8WqCunvt3eaOFNKXGy0sYwe9bXoqyNDWxil7etZEJLv/9igLYWuFGQvlAPabLvu7vi3V6DsLLli2SFVQZ+IHJxD7dI49rL1TqDWSU2+FepXn0ynFEGiUQ2Kd6o/RoHMTyxQG9eQK7ykCKM520rgZbtNbQIDAQAB")
+			}
+			
+			$('#message').val($('#id').val()+"+"+$('#timestamp').val()+"+account+"+$('#account').val()+"+"+$('#key').val())
+			
+          // Encrypt with the public key...
+          //var encrypt = new JSEncrypt();
+          //encrypt.setPublicKey($('#pubkey').val());
+          //var encrypted = encrypt.encrypt($('#message').val());
+		  //$('#signature').val(encrypted);
+		  
+			var sign = new JSEncrypt();
+			sign.setPrivateKey($('#privkey').val());
+			var signature = sign.sign($('#message').val(), CryptoJS.SHA256, "sha256");
+			$('#signature').val(signature);
+
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <label for="privkey">Private Key</label><br/>
+    <textarea id="privkey" rows="5" cols="65"></textarea><br/><br/>
+	
+	<form action="https://localhost:8080/get-balance">
+	<label >id:</label><br/>
+	<input id="id" name="id" type="text" value="1"><br/>
+	<label >timestamp:</label><br/>
+	<input id="timestamp" name="timestamp" type="text"><br/>
+	<label >account:</label><br/>
+	<input id="account" name="account" type="text"><br/>
+	<label >key:</label><br/>
+	<textarea id="key" name="key" rows="5" cols="65"></textarea><br/>
+	<label >message:</label><br/>
+	<textarea id="message" rows="3" cols="65"></textarea><br/>
+	<label >signature:</label><br/>
+	<textarea id="signature" name="signature" rows="5" cols="65"></textarea><br/>
+	<input id="sign" type="button" value="sign" /><br/>
+    <input type="submit" value="Submit">
+	</form> 
+  </body>
+</html>
